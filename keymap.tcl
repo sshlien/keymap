@@ -701,50 +701,41 @@ set the path to a midi file."
          }
   }
 
-proc key2sharps {key} {
-    set fifths {C G D A E B F# C# G# Eb Bb F}
-    set loc [string first "maj" $key] 
-    if {$loc > 0} {
-      incr loc -1
-      set majmin "major"
-      set ekey [string range $key 0 $loc]
-      #puts $ekey
-      set i [lsearch $fifths $ekey]
-    } else {
-      set loc [string first "min" $key]
-      incr loc -1
-      set ekey [string range $key 0 $loc]
-      set i [lsearch $fifths $ekey]
-      set majmin "minor"
-    } 
-    if {$majmin == "major"} {
-       if {$i  == 0} {
-         set ans "$key"
-       } elseif {$i < 8} {
-         set ans "$key $i sharp(s)"
-       } else {
-         set j [expr 3 - ($i - 8)]
-         set ans "$key $j flats"
-         }
-    }  else {
-       if {$i == 3} {
-         set ans  "$key"
-       } elseif {$i < 3} {
-         set j [expr 3 - $i]
-         set ans "$key $j flat(s)"
-       } else {
-         set j [expr $i - 3]   
-         set ans "$key $j sharp(s)"
-         }
-    }
-    return $ans
+
+array set keysharpflats {
+Cmajor "C major"
+C#major "Db major 5 flats"
+Dmajor "D major 2 sharps"
+Ebmajor "Eb major 3 flats"
+Emajor "E major 4 sharps"
+Fmajor "F major 1 flats"
+F#major "F# major 6 sharps or Gb 6 flats"
+Gmajor "G major 1 sharp"
+G#major "Ab major 4 flats"
+Amajor "A major 3 sharps"
+Bbmajor "Bb major 2 flats"
+Bmajor "B major 5 sharps"
+Cminor "C minor 3 flats"
+C#minor "C# minor 4 sharps"
+Dminor "D minor 1 flat"
+Ebminor "Eb minor 6 flats or D# minor 6 sharps"
+Eminor "E minor 1 sharp"
+Fminor "F minor 4 flats"
+F#minor "F# minor 3 sharps"
+Gminor "G minor 2 flats"
+G#minor "G# minor 5 sharps"
+Aminor "A minor"
+Bbminor "Bb minor 5 flats"
+Bminor "B minor 2 sharps"
 }
+
       
 
 proc keyDescriptor {keysig w x y} {
   global midi
   global stripscale
-  set str [append $keysig [key2sharps $keysig]]
+  global keysharpflats
+  set str [append $keysig $keysharpflats($keysig)]
   set spacing $midi(spacing)
   set xv [.keystrip.c xview]
   set xpos  [expr $x + [lindex $xv 0]*1000] 
