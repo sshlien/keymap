@@ -7,6 +7,40 @@ set title "Keymap 1.00 June 16 2021 20:40"
 wm title . $title
 tk_setPalette seashell1
 
+#help_info
+#show_message_page
+#write_ini
+#read_ini
+#file_browser
+#search_executable
+#keystrip_window
+#segment_histogram
+#make_tonnetz_diagram
+#tonnetzGrid2xy
+#highlightNotes
+#unhighlightNotes
+#*tonnetzDistance
+#*connectTonnetzNotes
+#showTonnetz
+#compare_onset
+#reorganizeMidiCmd
+#turnOffAllNotes
+#switchNoteStatus
+#adjustNoteStatus12
+#segmentTonnetz
+#update_notestatus12
+#annimateTonnetz
+#tonnetzPauseResume
+#find_key
+#keyDescriptor
+#show_histogram
+#keyMatch
+#keyscape_keyboard
+#play_exposed
+#plot_pitch_class_histogram
+#position_window
+#get_geometry_of_all_toplevels
+
 set midi(outfileName) "/home/seymour/clean_midi/Eagles/Peaceful Easy Feeling.mid"
 set midi(path_midi2abc) midi2abc
 set midi(path_midicopy) midicopy
@@ -464,6 +498,8 @@ proc compare_onset {a b} {
 }
 
 proc reorganizeMidiCmd {} {
+# extracts all channel on/off commands for all channels (tracks)
+# sorts them by time, and stores them in the global sorted_midiactions
     global pianoresult
     global sorted_midiactions
     global lengthOfSortedMidiactions
@@ -486,6 +522,7 @@ proc reorganizeMidiCmd {} {
     set lengthOfSortedMidiactions [llength $sorted_midiactions]
 }
 
+# notestatus stores all notes that are on at a specific time
 proc turnOffAllNotes {} {
     global notestatus
     for {set i 0} {$i < 128} {incr i } {
@@ -499,6 +536,8 @@ proc switchNoteStatus {midicmd} {
     set notestatus([lindex $midicmd 1]) [lindex $midicmd 2]
 }
 
+#notestatus12 keeps track of all pitch classes that are
+#active during a particular time interval
 proc adjustNoteStatus12 {} {
     global notestatus
     global notestatus12
@@ -563,6 +602,8 @@ global midi2note
 return $actionIndex
 }
 
+# displays Tonnetz for a specific frame and then
+# wait for a certain number of milliseconds
 proc animateTonnetz {beatstart tobeat} {
     global midi
     global df
@@ -731,6 +772,7 @@ Bminor "B minor 2 sharps"
 
       
 
+# called when mouse pointer is over a particular segment
 proc keyDescriptor {keysig w x y} {
   global midi
   global stripscale
@@ -745,7 +787,7 @@ proc keyDescriptor {keysig w x y} {
   }
  
 
-
+# called when clicking on one of the segments
 proc show_histogram {w x y} {
 global stripscale
 global midi
@@ -963,6 +1005,7 @@ proc plot_pitch_class_histogram {} {
             -width 2
 }
 
+# place window at a particular loction on screen
 proc position_window {window} {
    global midi
    if {[string length $midi($window)] < 1} return
